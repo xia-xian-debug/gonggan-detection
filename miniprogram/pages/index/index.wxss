@@ -1,0 +1,106 @@
+/* 贡柑病虫害检测 — 主页面样式 */
+
+.container { padding: 32rpx 24rpx 48rpx; }
+
+/* ── 标题 ── */
+.header { text-align: center; padding: 24rpx 0 16rpx; }
+.header-icon { font-size: 80rpx; display: block; margin-bottom: 8rpx; }
+.header-title { font-size: 40rpx; font-weight: bold; color: #166534; letter-spacing: 2rpx; }
+.header-sub { font-size: 24rpx; color: #9ca3af; margin-top: 8rpx; letter-spacing: 4rpx; }
+
+/* ── 卡片 ── */
+.card { background: #fff; border-radius: 24rpx; padding: 32rpx; margin-bottom: 24rpx;
+        box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.06); }
+
+/* ── 上传区 ── */
+.upload-area {
+    border: 4rpx dashed #bbf7d0; border-radius: 24rpx; padding: 64rpx 32rpx;
+    background: #f0fdf4; text-align: center;
+}
+.upload-icon { font-size: 96rpx; margin-bottom: 16rpx; }
+.upload-text { font-size: 32rpx; font-weight: 600; color: #374151; }
+.upload-hint { font-size: 24rpx; color: #9ca3af; margin-top: 8rpx; }
+
+/* 预览 */
+.preview-wrap { text-align: center; margin-bottom: 24rpx; }
+.preview-img { width: 100%; max-height: 480rpx; border-radius: 16rpx; }
+.retake-hint { font-size: 22rpx; color: #9ca3af; margin-top: 12rpx; }
+
+/* 模型选择 */
+.model-row { display: flex; align-items: center; margin-top: 24rpx; }
+.model-label { font-size: 26rpx; color: #6b7280; margin-right: 12rpx; }
+.model-picker {
+    font-size: 28rpx; color: #16a34a; font-weight: 600;
+    border: 2rpx solid #bbf7d0; border-radius: 12rpx;
+    padding: 10rpx 20rpx; background: #f0fdf4;
+}
+
+/* ── 按钮 ── */
+.btn-row { margin-top: 24rpx; }
+.btn {
+    width: 100%; border-radius: 16rpx; font-size: 32rpx; font-weight: 600;
+    padding: 24rpx; text-align: center; border: none;
+}
+.btn::after { border: none; }
+.btn-camera {
+    background: #16a34a; color: #fff;
+    box-shadow: 0 6rpx 24rpx rgba(22,163,74,0.3);
+}
+.btn-analyze {
+    background: linear-gradient(90deg, #22c55e, #16a34a); color: #fff;
+    margin-top: 16rpx; box-shadow: 0 6rpx 28rpx rgba(34,197,94,0.35);
+}
+.btn-back { background: #16a34a; color: #fff; margin-top: 32rpx; }
+
+/* ── 加载 ── */
+.loading-card { text-align: center; padding: 64rpx 32rpx; }
+.spinner {
+    width: 64rpx; height: 64rpx; border: 6rpx solid #dcfce7;
+    border-top-color: #16a34a; border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 24rpx;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-size: 32rpx; font-weight: 600; color: #374151; }
+.loading-sub { font-size: 24rpx; color: #9ca3af; margin-top: 8rpx; }
+
+/* ── 结果 ── */
+.result-header { text-align: center; padding-bottom: 24rpx;
+                  border-bottom: 2rpx solid #f3f4f6; margin-bottom: 24rpx; }
+.result-icon { font-size: 80rpx; }
+.result-disease { font-size: 44rpx; font-weight: 800; color: #1f2937; margin: 12rpx 0; }
+
+.conf-row { display: flex; align-items: center; gap: 16rpx; margin-top: 16rpx; }
+.conf-bar { flex: 1; }
+.conf-text { font-size: 26rpx; font-weight: 700; color: #6b7280; white-space: nowrap; }
+
+/* 结果区块 */
+.section { margin-bottom: 24rpx; }
+.section-title { font-size: 28rpx; font-weight: 700; color: #374151; margin-bottom: 10rpx; }
+.section-text { font-size: 26rpx; color: #6b7280; line-height: 44rpx; }
+.treatment-item { font-size: 26rpx; color: #6b7280; padding: 8rpx 0; line-height: 40rpx; }
+
+/* 农药卡片 */
+.pesticide-card {
+    background: #fff7ed; border: 2rpx solid #ffedd5; border-radius: 16rpx;
+    padding: 16rpx 20rpx; margin-bottom: 12rpx; font-size: 24rpx; color: #6b7280;
+}
+.pest-name { font-weight: 700; color: #ea580c; font-size: 26rpx; margin-bottom: 4rpx; }
+
+/* 严重程度 */
+.severity {
+    display: inline-block; padding: 10rpx 24rpx; border-radius: 40rpx;
+    font-size: 26rpx; font-weight: 700;
+}
+.severity-destructive { background: #fef2f2; color: #dc2626; border: 2rpx solid #fee2e2; }
+.severity-severe      { background: #fff7ed; color: #ea580c; border: 2rpx solid #ffedd5; }
+.severity-common      { background: #fffbeb; color: #d97706; border: 2rpx solid #fde68a; }
+.severity-healthy     { background: #f0fdf4; color: #16a34a; border: 2rpx solid #dcfce7; }
+
+/* ── 底部 ── */
+.footer-tips {
+    font-size: 22rpx; color: #9ca3af; text-align: center; line-height: 36rpx;
+    margin-top: 16rpx;
+}
+.tips-title { font-size: 26rpx; font-weight: 600; color: #6b7280; margin-bottom: 8rpx; }
+.tips-support { margin-top: 10rpx; color: #16a34a; font-weight: 500; }

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- ── PWA 基础配置 ── -->
+    <meta name="theme-color" content="#16a34a">
+    <meta name="description" content="拍照识别柑橘病虫害，一键获取防治建议">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+
+    <!-- ── Apple 专属（iOS Safari 添加到主屏幕） ── -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="贡柑检测">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-180.png') }}">
+
+    <title>贡柑病虫害检测</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- ═══════════ 页面容器 ═══════════ -->
+    <div class="app-container">
+
+        <!-- ── 顶部标题栏 ── -->
+        <header class="app-header">
+            <div class="header-icon">🍊</div>
+            <h1 class="header-title">贡柑病虫害检测</h1>
+            <p class="header-subtitle">拍照识别 · 一秒诊断 · 对症防治</p>
+        </header>
+
+        <!-- ═══════════ 主内容区 ═══════════ -->
+
+        <!-- ── 视图 ①：拍照页 ── -->
+        <main id="cameraView" class="view view--active">
+            <div class="card upload-card">
+                <div class="upload-area" id="uploadArea">
+                    <!-- 默认状态：引导拍照 -->
+                    <div class="upload-placeholder" id="uploadPlaceholder">
+                        <div class="upload-icon">📸</div>
+                        <p class="upload-text">点击下方按钮拍照</p>
+                        <p class="upload-hint">或从相册选择叶片/果实照片</p>
+                        <p class="upload-hint upload-hint--small">支持 JPG / PNG · 建议拍摄清晰近照</p>
+                    </div>
+
+                    <!-- 已选图片预览 -->
+                    <img id="previewImage" class="preview-image" alt="预览图片" style="display:none;">
+
+                    <!-- 重新拍照提示 -->
+                    <div id="retakeHint" class="retake-hint" style="display:none;">
+                        <p>点击图片可重新拍照</p>
+                    </div>
+                </div>
+
+                <!-- 隐藏的文件选择器 -->
+                <input
+                    type="file"
+                    id="fileInput"
+                    accept="image/*"
+                    capture="environment"
+                    style="display:none;"
+                >
+
+                <!-- 操作按钮组 -->
+                <div class="btn-group">
+                    <button id="btnCamera" class="btn btn--primary">
+                        <span class="btn-icon">📷</span>
+                        <span>拍照</span>
+                    </button>
+                    <button id="btnGallery" class="btn btn--secondary">
+                        <span class="btn-icon">🖼️</span>
+                        <span>相册</span>
+                    </button>
+                </div>
+
+                <!-- 识别按钮（选好图后才出现） -->
+                <button id="btnAnalyze" class="btn btn--analyze" style="display:none;">
+                    <span class="btn-icon">🔍</span>
+                    <span>开始识别</span>
+                </button>
+            </div>
+
+            <!-- 🆕 模型选择器（多模型时显示） -->
+            <div class="card model-selector" id="modelSelector" style="display:none;">
+                <h3 class="tips-title">🧠 识别模式</h3>
+                <select id="modelSelect" class="model-select"></select>
+            </div>
+
+            <!-- 识别小贴士 -->
+            <div class="tips-card">
+                <h3 class="tips-title">💡 拍摄小贴士</h3>
+                <ul class="tips-list">
+                    <li>尽量在自然光下拍摄，避免强光直射或阴影遮挡</li>
+                    <li>拍摄叶片正面，病斑清晰可见为佳</li>
+                    <li>保持手机稳定，对焦准确后再按快门</li>
+                    <li>可同时拍摄叶片 + 果实，多角度判断更准确</li>
+                </ul>
+                <p class="tips-support" id="tipsSupport">
+                    正在加载病害列表...
+                </p>
+            </div>
+        </main>
+
+        <!-- ── 视图 ②：结果页 ── -->
+        <main id="resultView" class="view">
+            <div class="card result-card" id="resultCard">
+                <!-- 顶部：病害名称 + 置信度 -->
+                <div class="result-header" id="resultHeader">
+                    <div class="result-icon" id="resultIcon">🔬</div>
+                    <h2 class="result-disease" id="resultDisease">--</h2>
+                    <div class="confidence-bar-wrapper">
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="confidenceFill"></div>
+                        </div>
+                        <span class="confidence-text" id="confidenceText">置信度 --%</span>
+                    </div>
+                </div>
+
+                <!-- 中部：病害简介 -->
+                <div class="result-section">
+                    <h3 class="section-title">📋 病害简介</h3>
+                    <p class="section-content" id="resultDescription">--</p>
+                </div>
+
+                <!-- 下部：症状特征 -->
+                <div class="result-section">
+                    <h3 class="section-title">🔍 识别特征</h3>
+                    <p class="section-content" id="resultSymptoms">--</p>
+                </div>
+
+                <!-- 下部：防治建议 -->
+                <div class="result-section">
+                    <h3 class="section-title">💊 防治建议</h3>
+                    <ul class="treatment-list" id="resultTreatment">
+                        <li>--</li>
+                    </ul>
+                </div>
+
+                <!-- 农药信息（如有） -->
+                <div class="result-section" id="pesticideSection" style="display:none;">
+                    <h3 class="section-title">🧪 推荐农药</h3>
+                    <div id="resultPesticides"></div>
+                </div>
+
+                <!-- 严重程度标签 -->
+                <div class="severity-tag" id="severityTag">--</div>
+            </div>
+
+            <!-- 按钮组 -->
+            <div class="btn-group result-btns">
+                <button id="btnBack" class="btn btn--primary">
+                    <span class="btn-icon">↩️</span>
+                    <span>再拍一张</span>
+                </button>
+                <button id="btnShare" class="btn btn--secondary">
+                    <span class="btn-icon">📤</span>
+                    <span>分享结果</span>
+                </button>
+            </div>
+        </main>
+
+        <!-- ── 视图 ③：错误页 ── -->
+        <main id="errorView" class="view">
+            <div class="card error-card">
+                <div class="error-icon">😕</div>
+                <h2 class="error-title">识别出错了</h2>
+                <p class="error-message" id="errorMessage">请稍后重试</p>
+                <button id="btnRetry" class="btn btn--primary">重新拍照</button>
+            </div>
+        </main>
+
+        <!-- ═══════════ 底部信息 ═══════════ -->
+        <footer class="app-footer">
+            <p>贡柑病虫害智能检测系统 v1.0</p>
+            <p class="footer-disclaimer">⚠️ 本系统仅供辅助参考，重大病害请咨询植保专家</p>
+        </footer>
+    </div>
+
+    <!-- ═══════════ 加载遮罩层 ═══════════ -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-card">
+            <div class="spinner"></div>
+            <p class="loading-text" id="loadingText">正在分析叶片...</p>
+            <p class="loading-sub">请稍候，通常需要 1~2 秒</p>
+        </div>
+    </div>
+
+    <!-- ── Service Worker（PWA 离线缓存） ── -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(() => console.log('🍊 PWA Service Worker 已注册'))
+                .catch((err) => console.warn('PWA 注册失败（非致命）:', err));
+        }
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

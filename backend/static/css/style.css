@@ -1,0 +1,699 @@
+/* ============================================================
+   贡柑病虫害检测系统 — 样式表
+   设计方向：自然绿调 · 卡片布局 · 移动优先 · 触控友好
+   ============================================================ */
+
+/* ── CSS 变量（主题色） ── */
+:root {
+    --green-50:  #f0fdf4;
+    --green-100: #dcfce7;
+    --green-200: #bbf7d0;
+    --green-500: #22c55e;
+    --green-600: #16a34a;
+    --green-700: #15803d;
+    --green-800: #166534;
+
+    --orange-50:  #fff7ed;
+    --orange-100: #ffedd5;
+    --orange-500: #f97316;
+    --orange-600: #ea580c;
+
+    --red-50:    #fef2f2;
+    --red-100:   #fee2e2;
+    --red-500:   #ef4444;
+    --red-600:   #dc2626;
+
+    --gray-50:  #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+
+    --white:    #ffffff;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    --radius:    16px;
+    --radius-sm: 10px;
+}
+
+/* ── 全局重置 ── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                 "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+    background: linear-gradient(160deg, #f0fdf4 0%, #dcfce7 40%, #e8f5e9 100%);
+    min-height: 100vh;
+    min-height: 100dvh; /* 移动端动态视口 */
+    color: var(--gray-700);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ── 应用容器 ── */
+.app-container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 16px 16px 32px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   顶部标题栏
+   ═══════════════════════════════════════════════════════════ */
+
+.app-header {
+    text-align: center;
+    padding: 24px 0 8px;
+}
+
+.header-icon {
+    font-size: 48px;
+    line-height: 1;
+    margin-bottom: 8px;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+}
+
+.header-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--green-800);
+    letter-spacing: 1px;
+}
+
+.header-subtitle {
+    font-size: 0.8rem;
+    color: var(--gray-400);
+    margin-top: 4px;
+    letter-spacing: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   视图切换
+   ═══════════════════════════════════════════════════════════ */
+
+.view {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.view--active {
+    display: flex;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   卡片通用
+   ═══════════════════════════════════════════════════════════ */
+
+.card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   上传区域（拍照页）
+   ═══════════════════════════════════════════════════════════ */
+
+.upload-card {
+    text-align: center;
+}
+
+.upload-area {
+    border: 2.5px dashed var(--green-200);
+    border-radius: var(--radius);
+    padding: 36px 20px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background: var(--green-50);
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-area:active {
+    border-color: var(--green-500);
+    background: var(--green-100);
+    transform: scale(0.98);
+}
+
+.upload-placeholder {
+    pointer-events: none;
+}
+
+.upload-icon {
+    font-size: 56px;
+    margin-bottom: 12px;
+}
+
+.upload-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: 4px;
+}
+
+.upload-hint {
+    font-size: 0.8rem;
+    color: var(--gray-400);
+}
+
+.upload-hint--small {
+    font-size: 0.7rem;
+    margin-top: 8px;
+    color: var(--gray-300);
+}
+
+/* 图片预览 */
+.preview-image {
+    width: 100%;
+    max-height: 320px;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+}
+
+.retake-hint {
+    margin-top: 10px;
+    font-size: 0.75rem;
+    color: var(--gray-400);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   按钮
+   ═══════════════════════════════════════════════════════════ */
+
+.btn-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex: 1;
+    padding: 14px 20px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    font-family: inherit;
+}
+
+.btn:active {
+    transform: scale(0.96);
+}
+
+.btn-icon {
+    font-size: 1.2rem;
+}
+
+.btn--primary {
+    background: var(--green-600);
+    color: var(--white);
+    box-shadow: 0 4px 14px rgba(22,163,74,0.3);
+}
+
+.btn--primary:active {
+    background: var(--green-700);
+}
+
+.btn--secondary {
+    background: var(--white);
+    color: var(--green-700);
+    border: 2px solid var(--green-200);
+}
+
+.btn--secondary:active {
+    background: var(--green-50);
+}
+
+.btn--analyze {
+    width: 100%;
+    margin-top: 14px;
+    padding: 16px;
+    font-size: 1.1rem;
+    background: linear-gradient(135deg, var(--green-500), var(--green-600));
+    color: var(--white);
+    box-shadow: 0 6px 20px rgba(34,197,94,0.35);
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 6px 20px rgba(34,197,94,0.35); }
+    50%      { box-shadow: 0 6px 32px rgba(34,197,94,0.55); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   拍摄小贴士
+   ═══════════════════════════════════════════════════════════ */
+
+.tips-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+}
+
+.tips-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--gray-700);
+    margin-bottom: 10px;
+}
+
+.tips-list {
+    list-style: none;
+    font-size: 0.8rem;
+    color: var(--gray-500);
+}
+
+.tips-list li {
+    padding: 5px 0;
+    padding-left: 20px;
+    position: relative;
+}
+
+.tips-list li::before {
+    content: "•";
+    position: absolute;
+    left: 4px;
+    color: var(--green-500);
+    font-weight: bold;
+}
+
+.tips-support {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--gray-100);
+    font-size: 0.75rem;
+    color: var(--gray-400);
+    text-align: center;
+}
+
+.tips-support strong {
+    color: var(--green-600);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   模型选择器
+   ═══════════════════════════════════════════════════════════ */
+
+.model-selector {
+    padding: 14px 18px;
+}
+
+.model-select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid var(--green-200);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    background: var(--green-50);
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2316a34a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    cursor: pointer;
+    outline: none;
+    font-family: inherit;
+}
+
+.model-select:focus {
+    border-color: var(--green-500);
+    box-shadow: 0 0 0 3px rgba(34,197,94,0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   结果页
+   ═══════════════════════════════════════════════════════════ */
+
+.result-card {
+    overflow: hidden;
+}
+
+/* 结果头部 */
+.result-header {
+    text-align: center;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--gray-100);
+    margin-bottom: 16px;
+}
+
+.result-icon {
+    font-size: 48px;
+    margin-bottom: 6px;
+}
+
+.result-disease {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--gray-800);
+    margin-bottom: 12px;
+}
+
+/* 置信度进度条 */
+.confidence-bar-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+}
+
+.confidence-bar {
+    width: 200px;
+    height: 10px;
+    background: var(--gray-100);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.confidence-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.confidence-text {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--gray-500);
+    min-width: 70px;
+}
+
+/* 置信度颜色等级 */
+.confidence--high  { background: var(--green-500); }
+.confidence--mid   { background: var(--orange-500); }
+.confidence--low   { background: var(--red-500);   }
+
+/* 结果各区块 */
+.result-section {
+    margin-bottom: 16px;
+}
+
+.section-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--gray-700);
+    margin-bottom: 6px;
+}
+
+.section-content {
+    font-size: 0.85rem;
+    color: var(--gray-500);
+    line-height: 1.7;
+}
+
+/* 防治建议列表 */
+.treatment-list {
+    list-style: none;
+}
+
+.treatment-list li {
+    font-size: 0.83rem;
+    color: var(--gray-500);
+    padding: 6px 0 6px 22px;
+    position: relative;
+    line-height: 1.6;
+}
+
+.treatment-list li::before {
+    content: "✅";
+    position: absolute;
+    left: 0;
+    top: 6px;
+    font-size: 0.7rem;
+}
+
+/* 农药卡片 */
+.pesticide-card {
+    background: var(--orange-50);
+    border: 1px solid var(--orange-100);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+}
+
+.pesticide-name {
+    font-weight: 700;
+    color: var(--orange-600);
+}
+
+.pesticide-info {
+    color: var(--gray-500);
+    margin-left: 6px;
+}
+
+/* 严重程度标签 */
+.severity-tag {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.severity--destructive { background: var(--red-50);    color: var(--red-600);    border: 1px solid var(--red-100); }
+.severity--severe      { background: var(--orange-50);  color: var(--orange-600); border: 1px solid var(--orange-100); }
+.severity--common      { background: #fffbeb;           color: #d97706;           border: 1px solid #fde68a; }
+.severity--healthy     { background: var(--green-50);   color: var(--green-600);  border: 1px solid var(--green-100); }
+
+/* 结果页按钮 */
+.result-btns {
+    margin-top: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   错误页
+   ═══════════════════════════════════════════════════════════ */
+
+.error-card {
+    text-align: center;
+    padding: 48px 20px;
+}
+
+.error-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+}
+
+.error-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 8px;
+}
+
+.error-message {
+    font-size: 0.9rem;
+    color: var(--gray-400);
+    margin-bottom: 24px;
+}
+
+.error-card .btn--primary {
+    max-width: 240px;
+    margin: 0 auto;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   加载遮罩
+   ═══════════════════════════════════════════════════════════ */
+
+.loading-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.loading-overlay--visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.loading-card {
+    text-align: center;
+}
+
+/* CSS 旋转动画 */
+.spinner {
+    width: 52px;
+    height: 52px;
+    border: 4px solid var(--green-100);
+    border-top-color: var(--green-600);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--gray-700);
+}
+
+.loading-sub {
+    font-size: 0.8rem;
+    color: var(--gray-400);
+    margin-top: 6px;
+}
+
+/* 模拟进度阶段 */
+.loading-steps {
+    margin-top: 18px;
+}
+
+.loading-step {
+    font-size: 0.75rem;
+    color: var(--gray-300);
+    padding: 3px 0;
+    transition: color 0.3s ease;
+}
+
+.loading-step--done {
+    color: var(--green-500);
+}
+
+.loading-step--active {
+    color: var(--gray-600);
+    font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   底部
+   ═══════════════════════════════════════════════════════════ */
+
+.app-footer {
+    text-align: center;
+    padding: 20px 0 0;
+    font-size: 0.7rem;
+    color: var(--gray-400);
+    flex-shrink: 0;
+}
+
+.footer-disclaimer {
+    margin-top: 2px;
+    opacity: 0.6;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Toast 提示
+   ═══════════════════════════════════════════════════════════ */
+
+.toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-120px);
+    background: var(--gray-800);
+    color: var(--white);
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    z-index: 2000;
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                opacity 0.25s ease;
+    pointer-events: none;
+}
+
+.toast--visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   响应式微调
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 360px) {
+    .upload-area {
+        padding: 24px 14px;
+    }
+
+    .upload-icon {
+        font-size: 44px;
+    }
+
+    .header-title {
+        font-size: 1.3rem;
+    }
+
+    .result-disease {
+        font-size: 1.3rem;
+    }
+
+    .btn {
+        padding: 12px 14px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (min-width: 481px) {
+    .app-container {
+        padding: 24px 24px 40px;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   暗色模式适配（简易版）
+   ═══════════════════════════════════════════════════════════ */
+
+@media (prefers-color-scheme: dark) {
+    /* 保持浅色主题——农业场景更适合明亮色调 */
+    /* 如需暗色模式，在此取消注释并调整变量 */
+}

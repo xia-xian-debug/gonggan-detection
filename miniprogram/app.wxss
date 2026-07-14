@@ -1,0 +1,26 @@
+/* 全局样式 */
+page {
+    --green-50:  #f0fdf4;
+    --green-500: #22c55e;
+    --green-600: #16a34a;
+    --green-700: #15803d;
+    --red-500:   #ef4444;
+    --red-600:   #dc2626;
+    --orange-500:#f97316;
+    --orange-600:#ea580c;
+    --gray-100: #f3f4f6;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --white:    #ffffff;
+    --radius:   16rpx;
+
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+                 "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    font-size: 28rpx;
+    color: var(--gray-700);
+    background: linear-gradient(160deg, #f0fdf4 0%, #dcfce7 40%, #e8f5e9 100%);
+    min-height: 100vh;
+}

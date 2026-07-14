@@ -1,0 +1,14 @@
+{
+    "pages": [
+        "pages/index/index"
+    ],
+    "window": {
+        "navigationBarBackgroundColor": "#16a34a",
+        "navigationBarTitleText": "贡柑病虫害检测",
+        "navigationBarTextStyle": "white",
+        "backgroundColor": "#f0fdf4",
+        "backgroundTextStyle": "light"
+    },
+    "style": "v2",
+    "sitemapLocation": "sitemap.json"
+}

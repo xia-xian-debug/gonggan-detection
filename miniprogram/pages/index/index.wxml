@@ -1,0 +1,106 @@
+<!-- 贡柑病虫害检测 — 主页面 -->
+<view class="container">
+
+    <!-- ── 标题 ── -->
+    <view class="header">
+        <text class="header-icon">🍊</text>
+        <view class="header-title">贡柑病虫害检测</view>
+        <view class="header-sub">拍照识别 · 一秒诊断</view>
+    </view>
+
+    <!-- ── 拍照区 ── -->
+    <view class="card" wx:if="{{!showResult && !loading}}">
+        <!-- 未选图 -->
+        <view class="upload-area" wx:if="{{!previewPath}}" bindtap="chooseImage">
+            <view class="upload-icon">📸</view>
+            <view class="upload-text">点击此处拍照</view>
+            <view class="upload-hint">或从相册选择叶片/果实照片</view>
+        </view>
+
+        <!-- 已选预览 -->
+        <view class="preview-wrap" wx:else>
+            <image class="preview-img" src="{{previewPath}}" mode="aspectFit" bindtap="chooseImage" />
+            <view class="retake-hint">点击图片重新拍摄</view>
+        </view>
+
+        <!-- 模型选择器 -->
+        <view class="model-row" wx:if="{{models.length > 1}}">
+            <text class="model-label">识别模式：</text>
+            <picker mode="selector" range="{{modelNames}}" value="{{modelIndex}}" bindchange="onModelChange">
+                <view class="model-picker">{{modelNames[modelIndex]}}</view>
+            </picker>
+        </view>
+
+        <!-- 按钮 -->
+        <view class="btn-row">
+            <button class="btn btn-camera" bindtap="chooseImage">📷 拍照</button>
+            <button class="btn btn-analyze" wx:if="{{previewPath}}" bindtap="doPredict">🔍 开始识别</button>
+        </view>
+    </view>
+
+    <!-- ── 加载中 ── -->
+    <view class="card loading-card" wx:if="{{loading}}">
+        <view class="spinner"></view>
+        <view class="loading-text">正在分析...</view>
+        <view class="loading-sub">请稍候，通常需要 1~2 秒</view>
+    </view>
+
+    <!-- ── 结果页 ── -->
+    <view class="card result-card" wx:if="{{showResult}}">
+        <!-- 病害名称 -->
+        <view class="result-header">
+            <view class="result-icon">{{resultIcon}}</view>
+            <view class="result-disease">{{result.class_name}}</view>
+            <!-- 置信度条 -->
+            <view class="conf-row">
+                <progress class="conf-bar" percent="{{confPct}}" stroke-width="8"
+                          activeColor="{{confColor}}" backgroundColor="#f3f4f6" />
+                <text class="conf-text">置信度 {{confPct}}%</text>
+            </view>
+        </view>
+
+        <!-- 病害简介 -->
+        <view class="section" wx:if="{{result.description}}">
+            <view class="section-title">📋 病害简介</view>
+            <view class="section-text">{{result.description}}</view>
+        </view>
+
+        <!-- 识别特征 -->
+        <view class="section" wx:if="{{result.symptoms}}">
+            <view class="section-title">🔍 识别特征</view>
+            <view class="section-text">{{result.symptoms}}</view>
+        </view>
+
+        <!-- 防治建议 -->
+        <view class="section" wx:if="{{result.treatment && result.treatment.length}}">
+            <view class="section-title">💊 防治建议</view>
+            <view class="treatment-item" wx:for="{{result.treatment}}" wx:key="index">✅ {{item}}</view>
+        </view>
+
+        <!-- 农药推荐 -->
+        <view class="section" wx:if="{{result.pesticides && result.pesticides.length}}">
+            <view class="section-title">🧪 推荐农药</view>
+            <view class="pesticide-card" wx:for="{{result.pesticides}}" wx:key="index">
+                <view class="pest-name">{{item.name}}</view>
+                <view wx:if="{{item.dilution}}">稀释：{{item.dilution}}</view>
+                <view wx:if="{{item.timing}}">喷施：{{item.timing}}</view>
+            </view>
+        </view>
+
+        <!-- 严重程度 -->
+        <view class="severity {{severityClass}}">{{severityLabel}}</view>
+
+        <!-- 返回按钮 -->
+        <button class="btn btn-back" bindtap="reset">📸 再拍一张</button>
+    </view>
+
+    <!-- ── 提示文字 ── -->
+    <view class="footer-tips">
+        <view class="tips-title">💡 拍摄小贴士</view>
+        <view>· 尽量在自然光下拍摄</view>
+        <view>· 拍摄正面，病斑清晰为佳</view>
+        <view>· 保持手机稳定</view>
+        <view class="tips-support">支持识别：{{tipsLabels}}</view>
+    </view>
+
+</view>
