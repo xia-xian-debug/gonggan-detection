@@ -499,6 +499,64 @@ body {
 .severity--common      { background: #fffbeb;           color: #d97706;           border: 1px solid #fde68a; }
 .severity--healthy     { background: var(--green-50);   color: var(--green-600);  border: 1px solid var(--green-100); }
 
+/* ═══════════════════════════════════════════════════════════
+   反馈区
+   ═══════════════════════════════════════════════════════════ */
+
+.feedback-section {
+    margin-top: 0;
+}
+
+.feedback-hint {
+    font-size: 0.8rem;
+    color: var(--gray-400);
+    margin-bottom: 12px;
+}
+
+.feedback-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.feedback-input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    color: var(--gray-700);
+    background: var(--white);
+    outline: none;
+    font-family: inherit;
+}
+
+.feedback-input:focus {
+    border-color: var(--green-500);
+    box-shadow: 0 0 0 3px rgba(34,197,94,0.15);
+}
+
+.btn--feedback {
+    background: var(--orange-500);
+    color: var(--white);
+    white-space: nowrap;
+    border: none;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+}
+
+.btn--feedback:active {
+    background: var(--orange-600);
+}
+
+.feedback-thanks {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--green-600);
+    margin-top: 12px;
+    font-weight: 600;
+}
+
 /* 结果页按钮 */
 .result-btns {
     margin-top: 0;

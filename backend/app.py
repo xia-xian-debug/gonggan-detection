@@ -18,11 +18,12 @@ sys.path.insert(0, str(Path(__file__).parent))
 from flask import Flask, render_template, request, jsonify, send_from_directory
 
 from predict import get_manager, predict_image, list_models
+from feedback_handler import save_feedback, get_feedback_summary, list_feedback
 
 app = Flask(__name__)
 
 # ── 启动时加载 ────────────────────────────────────────────────
-BASE_DIR = Path(__file__).parent
+BASE_DIR = Path(__file__).parent.resolve()
 PROJECT_DIR = BASE_DIR.parent
 
 with open(BASE_DIR / "disease_info.json", "r", encoding="utf-8") as f:
@@ -74,11 +75,14 @@ def predict():
     model_name = request.form.get("model", None)  # None = 用默认模型（ACTIVE_MODEL）
 
     # 3. 模型推理
+    import traceback
     try:
         result = predict_image(file, model_name=model_name)
     except ValueError as e:
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 400
     except Exception as e:
+        traceback.print_exc()
         return jsonify({"error": f"模型推理失败: {str(e)}"}), 500
 
     # 4. 合并病害百科信息（自动去除"（叶片）""（果实）"后缀匹配）
@@ -100,6 +104,42 @@ def predict():
     return jsonify(result)
 
 
+# ── 农户反馈接口 ────────────────────────────────────────────
+@app.route("/feedback", methods=["POST"])
+def submit_feedback():
+    """保存农户的识别纠正反馈"""
+    if "image" not in request.files:
+        return jsonify({"error": "未收到图片文件"}), 400
+
+    image_file = request.files["image"]
+    correction = request.form.get("correction", "").strip()
+    notes = request.form.get("notes", "").strip()
+
+    if not correction:
+        return jsonify({"error": "请指定正确的病害名称"}), 400
+
+    # 结果通过 form 传回（前端把原始预测序列化后传过来）
+    model_result = {}
+    raw = request.form.get("result", "{}")
+    try:
+        import json as _json
+        model_result = _json.loads(raw)
+    except Exception:
+        pass
+
+    try:
+        result = save_feedback(image_file, model_result, correction, notes)
+        return jsonify({"ok": True, "message": "感谢反馈，您的纠正将帮助改进模型！"})
+    except Exception as e:
+        return jsonify({"error": f"保存反馈失败: {str(e)}"}), 500
+
+
+@app.route("/feedback-summary")
+def api_feedback_summary():
+    """返回反馈统计（仅显示总数和准确率）"""
+    return jsonify(get_feedback_summary())
+
+
 # ── 病虫害百科接口 ────────────────────────────────────────────
 @app.route("/diseases")
 def api_list_diseases():
@@ -111,7 +151,7 @@ if __name__ == "__main__":
     import os, socket
 
     # Render / 云服务器用 gunicorn，不走这里
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 26767))
 
     # 本地开发：自动开 ngrok 公网隧道（手机跨网络访问用）
     # 需要先注册 ngrok 并获取 authtoken → 设为环境变量 NGROK_AUTHTOKEN

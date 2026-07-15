@@ -147,6 +147,22 @@
                 <div class="severity-tag" id="severityTag">--</div>
             </div>
 
+            <!-- 🆕 反馈区 -->
+            <div class="feedback-section card">
+                <h3 class="section-title">💬 识别结果对吗？</h3>
+                <p class="feedback-hint">如果模型识别有误，请输入实际的病虫害名称帮助改进</p>
+                <div class="feedback-row">
+                    <input type="text" id="feedbackInput" class="feedback-input"
+                           placeholder="请输入正确的病虫害名称（如"柑橘炭疽病"）">
+                    <button id="btnFeedback" class="btn btn--feedback">
+                        <span>📮 提交</span>
+                    </button>
+                </div>
+                <p class="feedback-thanks" id="feedbackThanks" style="display:none;">
+                    ✅ 感谢反馈！您的纠正将帮助改进模型
+                </p>
+            </div>
+
             <!-- 按钮组 -->
             <div class="btn-group result-btns">
                 <button id="btnBack" class="btn btn--primary">

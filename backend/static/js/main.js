@@ -52,9 +52,16 @@
     const modelSelect    = $('#modelSelect');
     const tipsSupport    = $('#tipsSupport');
 
+    // 反馈区
+    const feedbackInput  = $('#feedbackInput');
+    const btnFeedback    = $('#btnFeedback');
+    const feedbackThanks = $('#feedbackThanks');
+
     /* ── 状态 ── */
     let selectedFile = null;
-    let currentModel = 'mixed';  // 默认模型
+    let currentModel = 'mixed';
+    let lastResult = null;   // 最近一次预测结果
+    let lastImage = null;    // 最近一次上传的图片文件
 
     /* ═══════════════════════════════════════════════════════
        工具函数
@@ -105,6 +112,7 @@
         } catch (err) {
             console.warn('加载模型列表失败:', err);
         }
+
     }
 
     /** 🆕 根据当前模型动态更新"支持识别"列表 */
@@ -290,7 +298,10 @@
             await sleep(600);
 
             hideLoading();
+            lastResult = result;   // 保存结果供反馈使用
+            lastImage = file;      // 保存图片供反馈使用
             renderResult(result);
+            resetFeedback();       // 重置反馈区
 
         } catch (err) {
             hideLoading();
@@ -477,6 +488,49 @@
 
         const file = e.dataTransfer?.files?.[0];
         if (file) handleFile(file);
+    });
+
+    /* ═══════════════════════════════════════════════════════
+       农户反馈
+       ═══════════════════════════════════════════════════════ */
+
+    function resetFeedback() {
+        feedbackThanks.style.display = 'none';
+        feedbackInput.style.display = '';
+        btnFeedback.style.display = '';
+        feedbackInput.value = '';
+    }
+
+    btnFeedback.addEventListener('click', async () => {
+        const correction = feedbackInput.value.trim();
+        if (!correction) {
+            showToast('请输入正确的病虫害名称');
+            return;
+        }
+        if (!lastResult || !lastImage) {
+            showToast('请先识别一张图片');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('image', lastImage);
+        formData.append('correction', correction);
+        formData.append('result', JSON.stringify(lastResult));
+        formData.append('notes', '');
+
+        try {
+            const resp = await fetch('/feedback', { method: 'POST', body: formData });
+            const data = await resp.json();
+            if (data.ok) {
+                feedbackInput.style.display = 'none';
+                btnFeedback.style.display = 'none';
+                feedbackThanks.style.display = 'block';
+            } else {
+                showToast(data.error || '提交失败');
+            }
+        } catch (err) {
+            showToast('网络异常，反馈提交失败');
+        }
     });
 
     // ── 启动：加载模型列表 ──

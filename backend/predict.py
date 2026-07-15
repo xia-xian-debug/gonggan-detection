@@ -13,6 +13,7 @@
 
 import io
 from pathlib import Path
+from typing import Optional
 
 import torch
 import torch.nn as nn
@@ -292,7 +293,7 @@ class ModelManager:
 
     def __init__(self, project_dir: str):
         self.project_dir = project_dir
-        self._predictors: dict[str, CitrusPredictor] = {}
+        self._predictors = {}  # dict[str, CitrusPredictor]
 
     def get(self, model_name: str) -> CitrusPredictor:
         """获取指定模型（未加载则先加载并缓存）"""
@@ -307,12 +308,12 @@ class ModelManager:
             )
         return self._predictors[model_name]
 
-    def predict(self, model_name: str | None, image_input) -> dict:
+    def predict(self, model_name, image_input) -> dict:  # model_name: Optional[str]
         """预测，model_name 为 None 时使用默认模型"""
         name = model_name or ACTIVE_MODEL
         return self.get(name).predict(image_input)
 
-    def list_models(self) -> list[dict]:
+    def list_models(self):  # -> list[dict]
         """列出注册表中所有模型的信息"""
         return [
             {
@@ -330,7 +331,7 @@ class ModelManager:
 # 全局单例（app.py 启动时初始化一次）
 # ═══════════════════════════════════════════════════════════
 
-_manager: ModelManager | None = None
+_manager = None  # Optional[ModelManager]
 
 
 def get_manager(project_dir: str = ".") -> ModelManager:
@@ -340,11 +341,11 @@ def get_manager(project_dir: str = ".") -> ModelManager:
     return _manager
 
 
-def predict_image(image_input, model_name: str | None = None) -> dict:
+def predict_image(image_input, model_name=None) -> dict:  # model_name: Optional[str]
     """供 Flask 调用的快捷函数。model_name=None 时使用 ACTIVE_MODEL"""
     return get_manager().predict(model_name, image_input)
 
 
-def list_models() -> list[dict]:
+def list_models():  # -> list[dict]
     """返回所有可用模型列表（供前端下拉菜单）"""
     return get_manager().list_models()
